@@ -27,23 +27,26 @@ pipeline {
             }
         }
         stage('SSH KEY ACCESS') {
-            steps{
-                // Use double quotes for Groovy variable interpolation
-                sh '''
-                    echo "$SSH_KEY64" | base64 -d > mykey.pem
-                    chmod 400 mykey.pem
-                    ssh-keygen -R ${params.SERVER_IP} || true
+            steps {
+                sh '''#!/bin/bash
+                    set -e
+                    mkdir -p /tmp/jenkins_keys
+                    echo "$SSH_KEY64" | base64 -d > /tmp/jenkins_keys/mykey.pem
+                    chmod 400 /tmp/jenkins_keys/mykey.pem
+                    ssh-keygen -R "$SERVER_IP" || true
                 '''
             }
         }
+
         stage('Deploy Code to Server') {
             steps {
-                sh '''
-                    ssh ec2-user@${params.SERVER_IP} -i mykey.pem -T \
-                      "cd /usr/share/nginx/html && git pull origin main"
+                sh '''#!/bin/bash
+                    ssh -i /tmp/jenkins_keys/mykey.pem ec2-user@$SERVER_IP -T \
+                    "cd /usr/share/nginx/html && git pull origin main"
                 '''
             }
         }
+
         
     }
 
