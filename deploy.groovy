@@ -18,14 +18,15 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                     set -e
+
                     mkdir -p ~/.ssh
                     chmod 700 ~/.ssh
 
                     cat > ~/.ssh/config <<'EOF'
-        Host *
-            StrictHostKeyChecking no
-            UserKnownHostsFile=/dev/null
-        EOF
+                    Host *
+                        StrictHostKeyChecking no
+                        UserKnownHostsFile=/dev/null
+                    EOF
 
                     chmod 600 ~/.ssh/config
                 '''
