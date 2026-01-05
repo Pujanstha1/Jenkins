@@ -16,16 +16,22 @@ pipeline {
     stages {
         stage('Configure SSH') {
             steps {
-                sh '''
-                mkdir -p ~/.ssh
-                chmod 700 ~/.ssh
-                echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
-                chmod 600 ~/.ssh/config
-                touch ~/.ssh/known_hosts
-                chmod 600 ~/.ssh/known_hosts
+                sh '''#!/bin/bash
+                    set -e
+                    mkdir -p ~/.ssh
+                    chmod 700 ~/.ssh
+
+                    cat > ~/.ssh/config <<'EOF'
+        Host *
+            StrictHostKeyChecking no
+            UserKnownHostsFile=/dev/null
+        EOF
+
+                    chmod 600 ~/.ssh/config
                 '''
             }
         }
+
         stage('SSH KEY ACCESS') {
             steps {
                 sh '''#!/bin/bash
