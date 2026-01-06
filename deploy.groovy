@@ -11,7 +11,6 @@ pipeline {
         )
     }
     stages {
-        stages {
         stage('Configure SSH') {
             steps {
                 sh '''
@@ -19,7 +18,7 @@ pipeline {
                 chmod 700 ~/.ssh
                 cat > ~/.ssh/config <<'EOF'
 Host *
-  StrictHostKeyChecking no
+StrictHostKeyChecking no
 EOF
                 cat ~/.ssh/config   #to verify
                 touch ~/.ssh/known_hosts
