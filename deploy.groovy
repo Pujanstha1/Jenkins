@@ -16,13 +16,22 @@ pipeline {
                 sh '''
                     mkdir -p ~/.ssh
                     chmod 700 ~/.ssh
-                    echo -e "Host *\\n\\tStrictHostKeyChecking no\\n\\n" > ~/.ssh/config
-                    cat ~/.ssh/config
+
+                    cat <<EOF > ~/.ssh/config
+        Host *
+            StrictHostKeyChecking no
+            UserKnownHostsFile=/dev/null
+        EOF
+
+                    chmod 600 ~/.ssh/config
                     touch ~/.ssh/known_hosts
                     chmod 600 ~/.ssh/known_hosts
+
+                    cat ~/.ssh/config
                 '''
             }
         }
+
         stage('SSH Key Access') {
             steps {
                 // Use double quotes for Groovy variable interpolation
