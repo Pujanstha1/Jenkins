@@ -11,15 +11,19 @@ pipeline {
         )
     }
     stages {
+        stages {
         stage('Configure SSH') {
             steps {
                 sh '''
-                    mkdir -p ~/.ssh
-                    chmod 700 ~/.ssh
-                    echo -e "Host *\\n\\tStrictHostKeyChecking no\\n\\n" > ~/.ssh/config
-                    cat ~/.ssh/config
-                    touch ~/.ssh/known_hosts
-                    chmod 600 ~/.ssh/known_hosts
+                mkdir -p ~/.ssh
+                chmod 700 ~/.ssh
+                cat > ~/.ssh/config <<'EOF'
+Host *
+  StrictHostKeyChecking no
+EOF
+                cat ~/.ssh/config   #to verify
+                touch ~/.ssh/known_hosts
+                chmod 600 ~/.ssh/known_hosts
                 '''
             }
         }
