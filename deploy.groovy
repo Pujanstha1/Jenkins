@@ -6,7 +6,7 @@ pipeline {
     parameters {
         string(
             name: 'SERVER_IP',
-            defaultValue: '100.31.95.2',
+            defaultValue: '44.200.248.252',
             description: "Enter the server IP ADDRESS"
         )
     }
@@ -42,7 +42,7 @@ EOF
                 // Use triple double quotes for Groovy interpolation
                 sh """
                     ssh -i /tmp/jenkins_keys/myKey.pem ec2-user@${params.SERVER_IP} \
-                        "cd /usr/share/nginx/html && git pull"
+                        "cd /usr/share/nginx/html && git pull origin main"
                 """
             }
         }
